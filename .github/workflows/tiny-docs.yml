@@ -1,0 +1,107 @@
+name: Tiny Docs (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      tiny_docs_repo:
+        description: "Owner/Repo of your tiny-docs source"
+        required: false
+        type: string
+        default: flo-bit/tiny-docs
+      site:
+        description: "Docs site domain (default: <owner>.github.io)"
+        required: false
+        type: string
+      base:
+        description: "Docs base path (default: /<repo-name>)"
+        required: false
+        type: string
+      name:
+        description: "Project name (default: <repo-name>)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+
+      - name: Ensure docs-builder exists (checkout tiny-docs if missing)
+        if: ${{ hashFiles('docs-builder/**') == '' }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.tiny_docs_repo }}
+          path: docs-builder
+
+      - name: Derive defaults (owner/repo → site/base/name)
+        id: derive
+        shell: bash
+        env:
+          IN_SITE: ${{ inputs.site }}
+          IN_BASE: ${{ inputs.base }}
+          IN_NAME: ${{ inputs.name }}
+        run: |
+          set -euo pipefail
+          OWNER="${GITHUB_REPOSITORY%/*}"
+          REPO="${GITHUB_REPOSITORY#*/}"
+
+          SITE_DEFAULT="${OWNER}.github.io"
+          BASE_DEFAULT="/${REPO}"
+          NAME_DEFAULT="${REPO}"
+
+          SITE="${IN_SITE:-}"
+          BASE="${IN_BASE:-}"
+          NAME="${IN_NAME:-}"
+
+          SITE="${SITE:-$SITE_DEFAULT}"
+          BASE="${BASE:-$BASE_DEFAULT}"
+          NAME="${NAME:-$NAME_DEFAULT}"
+
+          echo "site=$SITE"  >> "$GITHUB_OUTPUT"
+          echo "base=$BASE"  >> "$GITHUB_OUTPUT"
+          echo "name=$NAME"  >> "$GITHUB_OUTPUT"
+
+      - name: Create docs/config.json if missing
+        shell: bash
+        run: |
+            set -euo pipefail
+            mkdir -p docs
+            if [ ! -f docs/config.json ]; then
+            SITE='${{ steps.derive.outputs.site }}'
+            BASE='${{ steps.derive.outputs.base }}'
+            NAME='${{ steps.derive.outputs.name }}'
+
+            if command -v jq >/dev/null 2>&1; then
+                jq -n --arg site "$SITE" --arg base "$BASE" --arg name "$NAME" \
+                '{site:$site, base:$base, name:$name}' > docs/config.json
+            else
+                printf '{\n  "site": "%s",\n  "base": "%s",\n  "name": "%s"\n}\n' \
+                "$SITE" "$BASE" "$NAME" > docs/config.json
+            fi
+            echo "Created docs/config.json, site=$SITE, base=$BASE, name=$NAME"
+            else
+            echo "docs/config.json already exists; leaving it unchanged."
+            fi
+
+      - name: Install, build, and upload the site artifact
+        uses: withastro/action@v3
+        with:
+          path: docs-builder/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
