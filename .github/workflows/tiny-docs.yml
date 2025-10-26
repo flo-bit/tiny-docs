@@ -68,23 +68,29 @@ jobs:
           echo "base=$BASE"  >> "$GITHUB_OUTPUT"
           echo "name=$NAME"  >> "$GITHUB_OUTPUT"
 
-      - name: Create docs/config.json if missing
-        shell: bash
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Logging
+        env:
+          DERIVED_SITE: ${{ steps.derive.outputs.site }}
+          DERIVED_BASE: ${{ steps.derive.outputs.base }}
+          DERIVED_NAME: ${{ steps.derive.outputs.name }}
         run: |
           set -euo pipefail
-          mkdir -p docs
-          if [ ! -f docs/config.json ]; then
-          SITE='${{ steps.derive.outputs.site }}'
-          BASE='${{ steps.derive.outputs.base }}'
-          NAME='${{ steps.derive.outputs.name }}'
+          echo "🔎 Listing docs-builder contents..."
+          ls -la docs-builder || true
+          echo "🔎 Listing docs-builder/scripts contents..."
+          ls -la docs-builder/scripts || true
 
-          printf '{\n  "SITE": "%s",\n  "BASE": "/%s",\n  "SITE_NAME": "%s"\n}\n' \
-          "$SITE" "$BASE" "$NAME" > docs/config.json
-
-          echo "Created docs/config.json, site=$SITE, base=$BASE, name=$NAME"
-          else
-          echo "docs/config.json already exists; leaving it unchanged."
-          fi
+      - name: Ensure docs/config.json has required fields (merge w/ defaults)
+        env:
+          DERIVED_SITE: ${{ steps.derive.outputs.site }}
+          DERIVED_BASE: ${{ steps.derive.outputs.base }}
+          DERIVED_NAME: ${{ steps.derive.outputs.name }}
+        run: node docs-builder/scripts/update-config.js
 
       - name: Install, build, and upload the site artifact
         uses: withastro/action@v3

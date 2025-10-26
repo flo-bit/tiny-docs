@@ -5,3 +5,9 @@
 - edit on github link
 - ally: add skip to content button
 - make asides github flavored markdown compatible
+- checkout tagged version of repo
+- fix relative links
+- add npx command to install either workflow or add docs-builder to your repo
+- option to not include readme
+- have readme as first doc
+- option to rename readme
