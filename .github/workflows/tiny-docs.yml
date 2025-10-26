@@ -78,7 +78,7 @@ jobs:
           DERIVED_SITE: ${{ steps.derive.outputs.site }}
           DERIVED_BASE: ${{ steps.derive.outputs.base }}
           DERIVED_NAME: ${{ steps.derive.outputs.name }}
-        run: node scripts/update-config.js
+        run: node docs-builder/scripts/update-config.js
 
       - name: Install, build, and upload the site artifact
         uses: withastro/action@v3
