@@ -78,8 +78,8 @@ jobs:
           BASE='${{ steps.derive.outputs.base }}'
           NAME='${{ steps.derive.outputs.name }}'
 
-          printf '{\n  "SITE": "%s",\n  "BASE": "/%s",\n  "SITE_NAME": "%s"\n}\n' \
-          "$SITE" "$BASE" "$NAME" > docs/config.json
+          printf '{\n  "BASE": "/%s",\n  "SITE_NAME": "%s"\n}\n' \
+          "$BASE" "$NAME" > docs/config.json
 
           echo "Created docs/config.json, site=$SITE, base=$BASE, name=$NAME"
           else
