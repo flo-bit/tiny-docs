@@ -4,9 +4,10 @@ on:
   workflow_call:
     inputs:
       tiny_docs_repo:
-        description: "Owner/Repo of your tiny-docs source (default: flo-bit/tiny-docs)"
+        description: "Owner/Repo of your tiny-docs source"
         required: false
         type: string
+        default: flo-bit/tiny-docs
       site:
         description: "Docs site domain (default: <owner>.github.io)"
         required: false
@@ -36,13 +37,18 @@ jobs:
         if: ${{ hashFiles('docs-builder/**') == '' }}
         uses: actions/checkout@v4
         with:
-          repository: ${{ inputs.tiny_docs_repo != '' && inputs.tiny_docs_repo || 'flo-bit/tiny-docs' }}
+          repository: ${{ inputs.tiny_docs_repo }}
           path: docs-builder
 
       - name: Derive defaults (owner/repo → site/base/name)
         id: derive
         shell: bash
+        env:
+          IN_SITE: ${{ inputs.site }}
+          IN_BASE: ${{ inputs.base }}
+          IN_NAME: ${{ inputs.name }}
         run: |
+          set -euo pipefail
           OWNER="${GITHUB_REPOSITORY%/*}"
           REPO="${GITHUB_REPOSITORY#*/}"
 
@@ -50,9 +56,9 @@ jobs:
           BASE_DEFAULT="/${REPO}"
           NAME_DEFAULT="${REPO}"
 
-          SITE="${{ inputs.site || '' }}"
-          BASE="${{ inputs.base || '' }}"
-          NAME="${{ inputs.name || '' }}"
+          SITE="${IN_SITE:-}"
+          BASE="${IN_BASE:-}"
+          NAME="${IN_NAME:-}"
 
           SITE="${SITE:-$SITE_DEFAULT}"
           BASE="${BASE:-$BASE_DEFAULT}"
@@ -65,13 +71,14 @@ jobs:
       - name: Create docs/config.json if missing
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p docs
           if [ ! -f docs/config.json ]; then
-            cat > docs/config.json <<-'JSON'
+cat > docs/config.json <<'JSON'
 {
-"site": "__SITE__",
-"base": "__BASE__",
-"name": "__NAME__"
+  "site": "__SITE__",
+  "base": "__BASE__",
+  "name": "__NAME__"
 }
 JSON
             sed -i "s|__SITE__|${{ steps.derive.outputs.site }}|g" docs/config.json
