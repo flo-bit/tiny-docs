@@ -68,12 +68,12 @@ jobs:
           mkdir -p docs
           if [ ! -f docs/config.json ]; then
             cat > docs/config.json <<-'JSON'
-            {
-            "site": "__SITE__",
-            "base": "__BASE__",
-            "name": "__NAME__"
-            }
-            JSON
+{
+"site": "__SITE__",
+"base": "__BASE__",
+"name": "__NAME__"
+}
+JSON
             sed -i "s|__SITE__|${{ steps.derive.outputs.site }}|g" docs/config.json
             sed -i "s|__BASE__|${{ steps.derive.outputs.base }}|g" docs/config.json
             sed -i "s|__NAME__|${{ steps.derive.outputs.name }}|g" docs/config.json
