@@ -9,7 +9,7 @@ on:
         type: string
         default: flo-bit/tiny-docs
       site:
-        description: "Docs site domain (default: <owner>.github.io)"
+        description: "Docs site domain (default: https://<owner>.github.io)"
         required: false
         type: string
       base:
@@ -52,7 +52,7 @@ jobs:
           OWNER="${GITHUB_REPOSITORY%/*}"
           REPO="${GITHUB_REPOSITORY#*/}"
 
-          SITE_DEFAULT="${OWNER}.github.io"
+          SITE_DEFAULT="https://${OWNER}.github.io"
           BASE_DEFAULT="/${REPO}"
           NAME_DEFAULT="${REPO}"
 
