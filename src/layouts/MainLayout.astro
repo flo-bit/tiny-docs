@@ -1,0 +1,75 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+import DocumentationLayout from "$layouts/DocumentationLayout.astro";
+import ProseWrapper from "$layouts/ProseWrapper.astro";
+import { getTitle, getSlug } from "src/utils";
+import { config } from "../../config";
+import SecondaryButton from "$components/buttons/SecondaryButton.astro";
+import Footer from "$components/Footer.astro";
+
+type Props = {
+  post: CollectionEntry<"docs">;
+  next: CollectionEntry<"docs"> | null;
+  previous: CollectionEntry<"docs"> | null;
+  Content: any;
+  headings: any;
+};
+
+const { post, next, previous, Content, headings } = Astro.props;
+---
+
+<DocumentationLayout
+  {...post.data}
+  title={getTitle(post) + (config.SITE_NAME ? " | " + config.SITE_NAME : "")}
+  image={post.id + ".png"}
+  id={post.id}
+  headings={headings}
+>
+  <div class="max-w-3xl lg:max-w-4xl ml-2 h-full p-4 mt-8 mb-16">
+    <ProseWrapper class="min-h-[40vh]">
+      <Content />
+    </ProseWrapper>
+
+    <div class="flex justify-between my-16">
+      <div>
+        {
+          previous ? (
+            <div class="flex flex-col gap-3 items-start">
+              <SecondaryButton href={config.BASE + "/" + getSlug(previous)}>
+                <span aria-hidden="true">&larr;</span>
+                Previous
+              </SecondaryButton>
+              <a
+                href={config.BASE + "/" + getSlug(previous)}
+                class="text-lg dark:text-base-300 font-semibold"
+              >
+                {getTitle(previous)}
+              </a>
+            </div>
+          ) : null
+        }
+      </div>
+
+      <div>
+        {
+          next ? (
+            <div class="flex flex-col gap-3 items-end">
+              <SecondaryButton href={config.BASE + "/" + getSlug(next)}>
+                <span aria-hidden="true">&rarr;</span>
+                Next
+              </SecondaryButton>
+              <a
+                href={config.BASE + "/" + getSlug(next)}
+                class="text-lg dark:text-base-300 font-semibold"
+              >
+                {getTitle(next)}
+              </a>
+            </div>
+          ) : null
+        }
+      </div>
+    </div>
+
+    <Footer />
+  </div>
+</DocumentationLayout>

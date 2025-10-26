@@ -1,0 +1,27 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+import { getSortedDocs, getNextAndPreviousDocs, getSlug } from "src/utils";
+import MainLayout from "$layouts/MainLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getSortedDocs();
+  return posts.map((post: any) => ({
+    params: { slug: getSlug(post) },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<"docs">;
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+
+const { next, previous } = await getNextAndPreviousDocs(post);
+---
+
+<MainLayout
+  post={post}
+  next={next}
+  previous={previous}
+  Content={Content}
+  headings={headings}
+/>

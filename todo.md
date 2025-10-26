@@ -1,0 +1,7 @@
+- [x] show mobile sidebar
+- [x] add next and previous buttons
+- [x] fix click in sidebar
+- [x] remove numbers and docs/ folder from the urls
+- edit on github link
+- ally: add skip to content button
+- make asides github flavored markdown compatible

@@ -1,0 +1,95 @@
+---
+import { config } from "../../config";
+import { getDocs, getTitle, getSlug } from "../utils";
+
+const docs = await getDocs();
+
+const { id, headings } = Astro.props;
+
+const numberOfSecondHeadings = headings.filter(
+  (heading: { depth: number }) => heading.depth === 2
+).length;
+---
+
+<div
+  class="mx-8 mt-8 pb-16 text-xl text-base-950 dark:text-base-50 flex flex-col gap-8"
+>
+  <a href={config.BASE} class="flex items-center gap-2">
+    <div class="text-2xl">{config.SITE_FAVICON}</div>
+    <div class="text-xl font-bold">{config.SITE_NAME}</div>
+  </a>
+
+  {
+    docs.map((category) => (
+      <div class="flex flex-col gap-3 relative">
+        {category.category ? (
+          <h2 class="text-sm font-bold">
+            {category.category[0].toUpperCase() + category.category.slice(1)}
+          </h2>
+        ) : null}
+
+        <div class="flex flex-col gap-4 w-full">
+          {category.docs.map((doc) => (
+            <div
+              class:list={[
+                "text-sm relative w-full flex flex-col",
+                category.category ? "ml-6" : "",
+                id === doc.id
+                  ? "text-accent-600 dark:text-accent-400"
+                  : "text-base-800 dark:text-base-400 hover:text-base-950 dark:hover:text-base-50",
+              ]}
+            >
+              <a href={config.BASE + "/" + getSlug(doc)} class="w-full">
+                {getTitle(doc)}
+              </a>
+
+              {id === doc.id ? (
+                <div class="absolute -inset-2 -z-10 rounded-xl bg-base-200/40 dark:bg-base-900/50" />
+              ) : null}
+
+              {id === doc.id ? (
+                <div class="flex flex-col">
+                  {headings.map(
+                    (heading: { depth: number; text: string; slug: string }) =>
+                      heading.depth === 2 &&
+                      numberOfSecondHeadings > 1 && (
+                        <a
+                          class="mt-2.5 text-sm ml-4 text-base-800 dark:text-base-300 hover:text-base-950 dark:hover:text-base-50 sidebar-link"
+                          href={
+                            config.BASE +
+                            "/" +
+                            getSlug(doc) +
+                            "#" +
+                            heading.slug
+                          }
+                        >
+                          {heading.text}
+                        </a>
+                      )
+                  )}
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+
+        {category.category ? (
+          <div class="absolute top-8 left-1 bottom-0 w-0.5 border-l border-base-200 dark:border-base-800" />
+        ) : null}
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // close popover when sidebar link is clicked
+    const sidebarLinks = document.querySelectorAll(".sidebar-link");
+    const popover = document.getElementById("mobile-menu");
+    sidebarLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        popover?.hidePopover();
+      });
+    });
+  });
+</script>

@@ -1,0 +1,21 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+import { getSortedDocs, getNextAndPreviousDocs } from "src/utils";
+import MainLayout from "$layouts/MainLayout.astro";
+
+type Props = CollectionEntry<"docs">;
+
+const posts = await getSortedDocs();
+const post = posts[0];
+const { Content, headings } = await render(post);
+
+const { next, previous } = await getNextAndPreviousDocs(post);
+---
+
+<MainLayout
+  post={post}
+  next={next}
+  previous={previous}
+  Content={Content}
+  headings={headings}
+/>
