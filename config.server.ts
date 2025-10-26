@@ -1,7 +1,6 @@
 // config.server.ts
 import { existsSync, readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, resolve as r } from "node:path";
+import { resolve as r } from "node:path";
 
 export type Config = {
   SITE?: string;
