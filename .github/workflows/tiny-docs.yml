@@ -9,7 +9,7 @@ on:
         type: string
         default: flo-bit/tiny-docs
       site:
-        description: "Docs site domain (default: <owner>.github.io)"
+        description: "Docs site domain (default: https://<owner>.github.io)"
         required: false
         type: string
       base:
@@ -52,7 +52,7 @@ jobs:
           OWNER="${GITHUB_REPOSITORY%/*}"
           REPO="${GITHUB_REPOSITORY#*/}"
 
-          SITE_DEFAULT="${OWNER}.github.io"
+          SITE_DEFAULT="https://${OWNER}.github.io"
           BASE_DEFAULT="/${REPO}"
           NAME_DEFAULT="${REPO}"
 
@@ -71,24 +71,20 @@ jobs:
       - name: Create docs/config.json if missing
         shell: bash
         run: |
-            set -euo pipefail
-            mkdir -p docs
-            if [ ! -f docs/config.json ]; then
-            SITE='${{ steps.derive.outputs.site }}'
-            BASE='${{ steps.derive.outputs.base }}'
-            NAME='${{ steps.derive.outputs.name }}'
+          set -euo pipefail
+          mkdir -p docs
+          if [ ! -f docs/config.json ]; then
+          SITE='${{ steps.derive.outputs.site }}'
+          BASE='${{ steps.derive.outputs.base }}'
+          NAME='${{ steps.derive.outputs.name }}'
 
-            if command -v jq >/dev/null 2>&1; then
-                jq -n --arg SITE "$SITE" --arg BASE "$BASE" --arg SITE_NAME "$NAME" \
-                '{site:$site, base:$base, name:$name}' > docs/config.json
-            else
-                printf '{\n  "SITE": "%s",\n  "BASE": "%s",\n  "SITE_NAME": "%s"\n}\n' \
-                "$SITE" "$BASE" "$NAME" > docs/config.json
-            fi
-            echo "Created docs/config.json, site=$SITE, base=$BASE, name=$NAME"
-            else
-            echo "docs/config.json already exists; leaving it unchanged."
-            fi
+          printf '{\n  "SITE": "%s",\n  "BASE": "/%s",\n  "SITE_NAME": "%s"\n}\n' \
+          "$SITE" "$BASE" "$NAME" > docs/config.json
+
+          echo "Created docs/config.json, site=$SITE, base=$BASE, name=$NAME"
+          else
+          echo "docs/config.json already exists; leaving it unchanged."
+          fi
 
       - name: Install, build, and upload the site artifact
         uses: withastro/action@v3
