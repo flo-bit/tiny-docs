@@ -71,23 +71,24 @@ jobs:
       - name: Create docs/config.json if missing
         shell: bash
         run: |
-          set -euo pipefail
-          mkdir -p docs
-          if [ ! -f docs/config.json ]; then
-cat > docs/config.json <<'JSON'
-{
-  "site": "__SITE__",
-  "base": "__BASE__",
-  "name": "__NAME__"
-}
-JSON
-            sed -i "s|__SITE__|${{ steps.derive.outputs.site }}|g" docs/config.json
-            sed -i "s|__BASE__|${{ steps.derive.outputs.base }}|g" docs/config.json
-            sed -i "s|__NAME__|${{ steps.derive.outputs.name }}|g" docs/config.json
+            set -euo pipefail
+            mkdir -p docs
+            if [ ! -f docs/config.json ]; then
+            SITE='${{ steps.derive.outputs.site }}'
+            BASE='${{ steps.derive.outputs.base }}'
+            NAME='${{ steps.derive.outputs.name }}'
+
+            if command -v jq >/dev/null 2>&1; then
+                jq -n --arg site "$SITE" --arg base "$BASE" --arg name "$NAME" \
+                '{site:$site, base:$base, name:$name}' > docs/config.json
+            else
+                printf '{\n  "site": "%s",\n  "base": "%s",\n  "name": "%s"\n}\n' \
+                "$SITE" "$BASE" "$NAME" > docs/config.json
+            fi
             echo "Created docs/config.json"
-          else
+            else
             echo "docs/config.json already exists; leaving it unchanged."
-          fi
+            fi
 
       - name: Install, build, and upload the site artifact
         uses: withastro/action@v3
