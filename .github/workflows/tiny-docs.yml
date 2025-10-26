@@ -79,10 +79,10 @@ jobs:
             NAME='${{ steps.derive.outputs.name }}'
 
             if command -v jq >/dev/null 2>&1; then
-                jq -n --arg site "$SITE" --arg base "$BASE" --arg name "$NAME" \
+                jq -n --arg SITE "$SITE" --arg BASE "$BASE" --arg SITE_NAME "$NAME" \
                 '{site:$site, base:$base, name:$name}' > docs/config.json
             else
-                printf '{\n  "site": "%s",\n  "base": "%s",\n  "name": "%s"\n}\n' \
+                printf '{\n  "SITE": "%s",\n  "BASE": "%s",\n  "SITE_NAME": "%s"\n}\n' \
                 "$SITE" "$BASE" "$NAME" > docs/config.json
             fi
             echo "Created docs/config.json, site=$SITE, base=$BASE, name=$NAME"
