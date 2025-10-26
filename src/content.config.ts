@@ -11,7 +11,7 @@ export const docsSchema = z.object({
 
 const docs = defineCollection({
   loader: glob({
-    pattern: ["docs/**/[^_]*.{md,mdx}", "README.md"],
+    pattern: ["docs/**/[^_]*.{md,mdx}", "*([Rr][Ee][Aa][Dd][Mm][Ee]).{md,mdx}"],
     base: "../",
   }),
   // Type-check frontmatter using a schema
