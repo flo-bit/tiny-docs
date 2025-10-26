@@ -1,6 +1,6 @@
 import { OGImageRoute } from "astro-og-canvas";
 import { config } from "../../../config";
-import { getSortedDocs } from "src/utils";
+import { getSortedDocs, getTitle } from "src/utils";
 
 const posts = await getSortedDocs();
 
@@ -10,15 +10,12 @@ const posts = await getSortedDocs();
 const pages = posts.reduce(
   (acc, post) => {
     acc[post.id] = {
-      title: "",
+      title: getTitle(post) ?? "",
       description: post.data.description ?? "",
     };
     return acc;
   },
-  {} as Record<
-    string,
-    { title: string; description: string; customOGImage?: string }
-  >,
+  {} as Record<string, { title: string; description: string }>,
 );
 
 export const { getStaticPaths, GET } = OGImageRoute({
@@ -31,8 +28,8 @@ export const { getStaticPaths, GET } = OGImageRoute({
   // In this example, we generate one image at `/open-graph/example.png`.
   pages: {
     main: {
-      title: config.SITE_NAME,
-      description: config.SITE_DESCRIPTION,
+      title: config.SITE_NAME ?? "hello",
+      description: config.SITE_DESCRIPTION ?? "",
     },
     ...pages,
   },
@@ -42,9 +39,7 @@ export const { getStaticPaths, GET } = OGImageRoute({
     title: page.title,
     description: page.description,
     bgImage: {
-      path: page.customOGImage
-        ? "." + page.customOGImage
-        : "./src/assets/backgrounds/background.jpg",
+      path: "./src/assets/backgrounds/background.jpg",
       fit: "cover",
     },
     font: {
