@@ -51,3 +51,12 @@ console.log(
 );
 
 console.log("\n🔍 Result:\n" + fs.readFileSync(CONFIG_PATH, "utf8"));
+
+// rename all .md files to .mdx in root folder and subfolders recursively
+const mdFiles = fs.readdirSync(".", { withFileTypes: true, recursive: true })
+  .filter(dirent => dirent.isFile() && dirent.name.endsWith(".md"))
+  .map(dirent => dirent.name);
+
+for (const mdFile of mdFiles) {
+  fs.renameSync(mdFile, mdFile.replace(".md", ".mdx"));
+}
