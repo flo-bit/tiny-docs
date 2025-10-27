@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 
 const CONFIG_PATH = "tdocs.config.json";
 
@@ -52,11 +53,25 @@ console.log(
 
 console.log("\n🔍 Result:\n" + fs.readFileSync(CONFIG_PATH, "utf8"));
 
-// rename all .md files to .mdx in root folder and subfolders recursively
-const mdFiles = fs.readdirSync(".", { withFileTypes: true, recursive: true })
-  .filter(dirent => dirent.isFile() && dirent.name.endsWith(".md"))
-  .map(dirent => dirent.name);
+function renameMdToMdx(dir = process.cwd()) {
+  // Read all items in the current directory
+  const items = fs.readdirSync(dir, { withFileTypes: true });
 
-for (const mdFile of mdFiles) {
-  fs.renameSync(mdFile, mdFile.replace(".md", ".mdx"));
+  for (const item of items) {
+    const fullPath = path.join(dir, item.name);
+
+    if (item.isDirectory()) {
+      // Recurse into subdirectories
+      renameMdToMdx(fullPath);
+    } else if (item.isFile() && path.extname(item.name) === ".md") {
+      const newName = path.basename(item.name, ".md") + ".mdx";
+      const newPath = path.join(dir, newName);
+
+      fs.renameSync(fullPath, newPath);
+      console.log(`Renamed: ${fullPath} → ${newPath}`);
+    }
+  }
 }
+
+// Run the function
+renameMdToMdx();
