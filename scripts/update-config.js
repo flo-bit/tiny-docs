@@ -9,6 +9,8 @@ const derived = {
   BASE: process.env.DERIVED_BASE,
   SITE_NAME: process.env.DERIVED_NAME,
 
+  GITHUB_URL: "https://github.com/" + process.env.DERIVED_REPO,
+
   SHOW_THEME_TOGGLE: true,
   SEARCH_ENABLED: true,
 

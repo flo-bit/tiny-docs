@@ -49,7 +49,7 @@ jobs:
           IN_NAME: ${{ inputs.name }}
         run: |
           set -euo pipefail
-          OWNER="${GITHUB_REPOSITORY%/*}"
+          OWNER="$GITHUB_REPOSITORY_OWNER"
           REPO="${GITHUB_REPOSITORY#*/}"
 
           SITE_DEFAULT="https://${OWNER}.github.io"
@@ -67,6 +67,8 @@ jobs:
           echo "site=$SITE"  >> "$GITHUB_OUTPUT"
           echo "base=$BASE"  >> "$GITHUB_OUTPUT"
           echo "name=$NAME"  >> "$GITHUB_OUTPUT"
+          echo "owner=$OWNER"  >> "$GITHUB_OUTPUT"
+          echo "repo=$GITHUB_REPOSITORY"  >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -78,6 +80,8 @@ jobs:
           DERIVED_SITE: ${{ steps.derive.outputs.site }}
           DERIVED_BASE: ${{ steps.derive.outputs.base }}
           DERIVED_NAME: ${{ steps.derive.outputs.name }}
+          DERIVED_OWNER: ${{ steps.derive.outputs.owner }}
+          DERIVED_REPO: ${{ steps.derive.outputs.repo }}
         run: node docs-builder/scripts/update-config.js
 
       - name: Install, build, and upload the site artifact

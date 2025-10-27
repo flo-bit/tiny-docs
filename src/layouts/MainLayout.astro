@@ -6,6 +6,7 @@ import { getTitle, getSlug } from "src/utils";
 import { config } from "../../config";
 import SecondaryButton from "$components/buttons/SecondaryButton.astro";
 import Footer from "$components/Footer.astro";
+import ExternalLink from "$components/ExternalLink.astro";
 
 type Props = {
   post: CollectionEntry<"docs">;
@@ -27,7 +28,7 @@ const { post, next, previous, Content, headings } = Astro.props;
 >
   <div class="max-w-3xl lg:max-w-4xl ml-2 h-full p-4 mt-8 mb-16">
     <ProseWrapper class="min-h-[40vh]">
-      <Content />
+      <Content components={{ a: ExternalLink }} />
     </ProseWrapper>
 
     <div class="flex justify-between my-16">
