@@ -22,10 +22,6 @@ export const getSortedDocs = async () => {
 export const getDocs = async () => {
   const docs = await getSortedDocs();
 
-  docs.forEach((doc) => {
-    console.log(doc.id);
-  });
-
   const categories = docs
     .map((doc) => getCategory(doc))
     .filter((category) => category);
@@ -40,7 +36,6 @@ export const getDocs = async () => {
       docs: docs.filter((doc) => getCategory(doc) === category),
     };
   });
-  console.log(sortedDocs.map((doc) => doc.docs.map((d) => d.data)));
   return sortedDocs;
 };
 

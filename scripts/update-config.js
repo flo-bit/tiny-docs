@@ -1,12 +1,14 @@
 import fs from "node:fs";
 
-const CONFIG_PATH = "docs/config.json";
+const CONFIG_PATH = "tdocs.config.json";
 
 // Defaults derived from workflow env
 const derived = {
   SITE: process.env.DERIVED_SITE,
   BASE: process.env.DERIVED_BASE,
   SITE_NAME: process.env.DERIVED_NAME,
+
+  SHOW_THEME_TOGGLE: true,
 };
 
 function readExisting(path) {
@@ -16,7 +18,7 @@ function readExisting(path) {
     return JSON.parse(raw);
   } catch (e) {
     console.warn(
-      "⚠️ Invalid JSON in docs/config.json; continuing with empty object.",
+      "⚠️ Invalid JSON in tdocs.config.json; continuing with empty object.",
     );
     return {};
   }
@@ -33,7 +35,6 @@ function normalize(merged) {
   return merged;
 }
 
-fs.mkdirSync("docs", { recursive: true });
 const existing = readExisting(CONFIG_PATH);
 
 // Merge so existing values win; only fill in missing keys from derived
@@ -41,7 +42,7 @@ const merged = normalize({ ...derived, ...existing });
 
 fs.writeFileSync(CONFIG_PATH, JSON.stringify(merged, null, 2) + "\n");
 console.log(
-  "✅ Wrote docs/config.json with keys:",
+  "✅ Wrote tdocs.config.json with keys:",
   Object.keys(merged).join(", "),
 );
 

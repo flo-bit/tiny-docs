@@ -50,12 +50,14 @@ const defaultConfig: Config = {
 
 export function loadConfig(): Config {
   try {
-    const configPath = r("../docs/config.json");
+    const configPath = r("../tdocs.config.json");
     if (existsSync(configPath)) {
       return JSON.parse(readFileSync(configPath, "utf-8")) as Config;
     }
   } catch (e) {
-    console.warn("⚠️ No config.json found or invalid JSON — using defaults.");
+    console.warn(
+      "⚠️ No tdocs.config.json found or invalid JSON — using defaults.",
+    );
   }
   return defaultConfig;
 }

@@ -10,7 +10,8 @@ import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
 
 import pagefind from "astro-pagefind";
-import customEmbeds from "astro-custom-embeds";
+import customEmbeds from "./custom-embeds";
+import remarkGithubAdmonitionsToDirectives from "remark-github-admonitions-to-directives";
 
 import {
   transformerMetaHighlight,
@@ -21,6 +22,7 @@ import LinkCardEmbed from "./src/embeds/link-card/embed";
 import YoutubeEmbed from "./src/embeds/youtube/embed";
 import ExcalidrawEmbed from "./src/embeds/excalidraw/embed";
 import GithubEmbed from "./src/embeds/github/embed";
+import { calloutEmbeds } from "./src/embeds/callouts/embeds";
 
 import react from "@astrojs/react";
 import { config } from "./config.server";
@@ -45,7 +47,13 @@ export default defineConfig({
   integrations: [
     pagefind(),
     customEmbeds({
-      embeds: [ExcalidrawEmbed, YoutubeEmbed, GithubEmbed, LinkCardEmbed],
+      embeds: [
+        ExcalidrawEmbed,
+        YoutubeEmbed,
+        GithubEmbed,
+        LinkCardEmbed,
+        ...calloutEmbeds,
+      ],
     }),
     mdx(),
     sitemap(),
@@ -68,7 +76,7 @@ export default defineConfig({
       wrap: true,
     },
 
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkGithubAdmonitionsToDirectives, remarkMath],
     rehypePlugins: [rehypeMathjax],
   },
 

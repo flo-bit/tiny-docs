@@ -6,7 +6,6 @@ interface Props {
   image?: string;
 }
 
-console.log(Astro.url.pathname, Astro.site);
 let canonicalURL: URL | undefined = undefined;
 try {
   canonicalURL = new URL(Astro.url.pathname, Astro.site);

@@ -45,19 +45,19 @@ function modifySvg(svgString: string): string {
 
   $("text").each((_, el) => {
     $(el).removeAttr("fill");
-    $(el).addClass("fill-skin-base");
+    $(el).addClass("fill-base-800 dark:fill-base-100");
   });
 
   $("rect").each((_, el) => {
     $(el).removeAttr("fill");
-    $(el).addClass("fill-skin-soft");
+    $(el).addClass("fill-accent-600 dark:fill-accent-500");
   });
 
   $("path").each((_, el) => {
     $(el).removeAttr("stroke");
-    $(el).addClass("stroke-skin-accent");
+    $(el).addClass("stroke-accent-600 dark:stroke-accent-500");
     if ($(el).attr("fill") !== "none") {
-      $(el).addClass("fill-skin-soft");
+      $(el).addClass("fill-accent-600 dark:fill-accent-500");
       $(el).removeAttr("fill");
     }
   });
@@ -82,7 +82,11 @@ try {
 ---
 
 <figure class:list={["mx-auto max-w-full overflow-hidden my-8", className]}>
-  <div class="excalidraw-svg" aria-label={alt} set:html={modifiedSvg} />
+  <div
+    class="w-full max-w-full overflow-hidden excalidraw-svg"
+    aria-label={alt}
+    set:html={modifiedSvg}
+  />
   {
     caption && (
       <figcaption class="text-center mt-4 text-sm text-base-700 dark:text-base-300 italic">
@@ -93,20 +97,8 @@ try {
 </figure>
 
 <style>
-  .excalidraw-svg {
-    @apply w-full max-w-full overflow-hidden;
-  }
   :global(.excalidraw-svg svg) {
     @apply w-full h-auto;
-  }
-  :global(.excalidraw-svg .fill-skin-base) {
-    @apply fill-base-800 dark:fill-base-100;
-  }
-  :global(.excalidraw-svg .fill-skin-soft) {
-    @apply fill-accent-600 dark:fill-accent-500;
-  }
-  :global(.excalidraw-svg .stroke-skin-accent) {
-    @apply stroke-accent-600 dark:stroke-accent-500;
   }
   :global(.excalidraw-svg .excalidraw-element) {
     @apply transition-all duration-300;

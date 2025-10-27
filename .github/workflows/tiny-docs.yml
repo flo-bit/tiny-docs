@@ -73,19 +73,7 @@ jobs:
         with:
           node-version: 20
       
-      - name: Logging
-        env:
-          DERIVED_SITE: ${{ steps.derive.outputs.site }}
-          DERIVED_BASE: ${{ steps.derive.outputs.base }}
-          DERIVED_NAME: ${{ steps.derive.outputs.name }}
-        run: |
-          set -euo pipefail
-          echo "🔎 Listing docs-builder contents..."
-          ls -la docs-builder || true
-          echo "🔎 Listing docs-builder/scripts contents..."
-          ls -la docs-builder/scripts || true
-
-      - name: Ensure docs/config.json has required fields (merge w/ defaults)
+      - name: Ensure tdocs.config.json has required fields (merge w/ defaults)
         env:
           DERIVED_SITE: ${{ steps.derive.outputs.site }}
           DERIVED_BASE: ${{ steps.derive.outputs.base }}
