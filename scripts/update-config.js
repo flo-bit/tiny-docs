@@ -9,6 +9,10 @@ const derived = {
   SITE_NAME: process.env.DERIVED_NAME,
 
   SHOW_THEME_TOGGLE: true,
+  SEARCH_ENABLED: true,
+
+  BASE_COLOR: "stone",
+  ACCENT_COLOR: "rose",
 };
 
 function readExisting(path) {
