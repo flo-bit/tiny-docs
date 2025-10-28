@@ -7,7 +7,7 @@ on:
         description: "Owner/Repo of your tiny-docs source"
         required: false
         type: string
-        default: flo-bit/tiny-docs@v1
+        default: flo-bit/tiny-docs
       site:
         description: "Docs site domain (default: https://<owner>.github.io)"
         required: false
@@ -38,6 +38,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.tiny_docs_repo }}
+          ref: v1
           path: docs-builder
 
       - name: Derive defaults (owner/repo → site/base/name)
