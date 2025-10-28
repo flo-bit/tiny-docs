@@ -13,6 +13,7 @@
 - [x] automatically add github repo link
 - [ ] download images and other assets and include them in the docs
 - [x] open external links in new tab
+- [ ] create docs for tiny-docs with tiny docs
 
 - [ ] improve search
 - [ ] ally: add skip to content button
