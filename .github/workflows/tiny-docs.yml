@@ -7,7 +7,7 @@ on:
         description: "Owner/Repo of your tiny-docs source"
         required: false
         type: string
-        default: flo-bit/tiny-docs
+        default: flo-bit/tiny-docs@v1
       site:
         description: "Docs site domain (default: https://<owner>.github.io)"
         required: false

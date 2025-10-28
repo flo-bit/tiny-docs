@@ -4,7 +4,7 @@
 
 1. Enable github pages in the repo settings. Go to _SETTINGS &rarr; PAGES &rarr; SOURCE: Github Actions_
 
-2. Add a new github action e.g. in `.github/workflows/deploy.yml` with the following content:
+2. Add a new github action `.github/workflows/docs.yml` with the following content:
 
 ```yaml
 name: Deploy Docs
@@ -21,7 +21,7 @@ permissions:
 
 jobs:
     docs:
-        uses: flo-bit/tiny-docs/.github/workflows/tiny-docs.yml@release/v1
+        uses: flo-bit/tiny-docs/.github/workflows/tiny-docs.yml@v1
 ```
 
 3. Run the workflow manually or push to the main branch, after a minute or two your docs should be live at `https://<yourusername>.github.io/<yourrepo>`.
