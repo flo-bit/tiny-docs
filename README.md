@@ -16,7 +16,7 @@ on:
         branches: [main]
 
 permissions:
-    contents: read
+    id-token: write
     pages: write
 
 jobs:
