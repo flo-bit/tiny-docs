@@ -19,4 +19,6 @@ export type Config = {
   EMAIL?: string;
 
   EXCLUDE_README?: boolean;
+
+  REPLACE_README_WITH_TITLE?: string;
 };

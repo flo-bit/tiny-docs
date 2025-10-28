@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { config } from "../../config";
-import { getSortedDocs } from "src/utils";
+import { getSortedDocs } from "../content-utils";
 
 const docs = await getSortedDocs();
 

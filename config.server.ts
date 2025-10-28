@@ -24,6 +24,7 @@ const defaultConfig: Config = {
   EMAIL: "",
 
   EXCLUDE_README: false,
+  REPLACE_README_WITH_TITLE: "",
 };
 
 export function loadConfig(): Config {

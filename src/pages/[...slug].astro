@@ -1,6 +1,10 @@
 ---
 import { type CollectionEntry, render } from "astro:content";
-import { getSortedDocs, getNextAndPreviousDocs, getSlug } from "src/utils";
+import {
+  getSortedDocs,
+  getNextAndPreviousDocs,
+  getSlug,
+} from "../content-utils";
 import MainLayout from "$layouts/MainLayout.astro";
 
 export async function getStaticPaths() {

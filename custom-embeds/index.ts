@@ -48,7 +48,6 @@ export default function customEmbeds({
 }: {
   embeds?: EmbedsOption[];
 } = {}) {
-  console.log("customEmbeds", embeds);
   const AstroCustomEmbeds: AstroIntegration = {
     name: "astro-custom-embeds",
     hooks: {
@@ -101,5 +100,4 @@ function checkIntegrationsOrder({ integrations }: AstroConfig) {
         "Please move `mdx()` after `customEmbeds()` in the `integrations` array in astro.config.ts.",
     );
   }
-  console.log("integrations", integrations);
 }

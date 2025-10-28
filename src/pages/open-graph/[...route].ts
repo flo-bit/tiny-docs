@@ -1,6 +1,6 @@
 import { OGImageRoute } from "astro-og-canvas";
 import { config } from "../../../config";
-import { getSortedDocs, getTitle } from "src/utils";
+import { getSortedDocs, getTitle } from "../../content-utils";
 
 const posts = await getSortedDocs();
 

@@ -25,3 +25,5 @@ jobs:
 ```
 
 3. Run the workflow manually or push to the main branch, after a minute or two your docs should be live at `https://<yourusername>.github.io/<yourrepo>`.
+
+The docs will include all markdown files in the `docs/` folder of your repo as well as the `Readme.md` file.

@@ -5,14 +5,14 @@
 - [x] make asides github flavored markdown compatible
 - [ ] edit on github link
 - [ ] checkout tagged version of repo
-- [ ] fix relative links
+- [x] fix relative links (seems to work, more testing needed)
 - [ ] add npx command to install either workflow or add docs-builder to your repo
 - [ ] option to not include readme
 - [ ] have readme as first doc
-- [ ] option to rename readme
-- [ ] automatically add github repo link
+- [x] option to rename readme
+- [x] automatically add github repo link
 - [ ] download images and other assets and include them in the docs
-- [ ] open external links in new tab
+- [x] open external links in new tab
 
 - [ ] improve search
 - [ ] ally: add skip to content button

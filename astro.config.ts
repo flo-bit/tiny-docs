@@ -26,6 +26,7 @@ import { calloutEmbeds } from "./src/embeds/callouts/embeds";
 
 import react from "@astrojs/react";
 import { config } from "./config.server";
+import fixLinks from "./transform-links";
 
 // https://astro.build/config
 export default defineConfig({
@@ -55,6 +56,7 @@ export default defineConfig({
         ...calloutEmbeds,
       ],
     }),
+    fixLinks(),
     mdx(),
     sitemap(),
     tailwind(),

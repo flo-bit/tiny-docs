@@ -6,7 +6,12 @@ let attr: { target?: string; rel?: string } = {};
 
 let isExternal = false;
 
-if (!href.includes(domain) && !href.startsWith("/") && !href.startsWith("#")) {
+if (
+  !href.includes(domain) &&
+  !href.startsWith("/") &&
+  !href.startsWith("#") &&
+  !href.startsWith(".")
+) {
   attr["target"] = "_blank";
   attr["rel"] = "noopener noreferrer";
   isExternal = true;
