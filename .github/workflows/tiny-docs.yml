@@ -30,11 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout target repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Ensure docs-builder exists (checkout tiny-docs if missing)
         if: ${{ hashFiles('docs-builder/**') == '' }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ inputs.tiny_docs_repo }}
           ref: v1
@@ -71,9 +71,9 @@ jobs:
           echo "repo=$GITHUB_REPOSITORY"  >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
       
       - name: Ensure tdocs.config.json has required fields (merge w/ defaults)
         env:
@@ -85,7 +85,7 @@ jobs:
         run: node docs-builder/scripts/update-config.js
 
       - name: Install, build, and upload the site artifact
-        uses: withastro/action@v3
+        uses: withastro/action@v6
         with:
           path: docs-builder/
 
@@ -98,4 +98,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
