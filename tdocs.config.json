@@ -1,7 +1,6 @@
 {
   "SITE_NAME": "Tiny Docs",
   "SITE_DESCRIPTION": "Quick to setup, simple, minimalistic docs for your GitHub project.",
-  "BASE": "",
   "SEARCH_ENABLED": true,
   "SHOW_THEME_TOGGLE": true,
   "BASE_COLOR": "zinc",

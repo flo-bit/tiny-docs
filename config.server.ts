@@ -42,7 +42,8 @@ const configPath = resolve(contentRoot, "tdocs.config.json");
 export function loadConfig(): Config {
   if (!existsSync(configPath)) return defaultConfig;
   try {
-    return JSON.parse(readFileSync(configPath, "utf-8")) as Config;
+    const parsed = JSON.parse(readFileSync(configPath, "utf-8"));
+    return { ...defaultConfig, ...parsed };
   } catch {
     console.warn("⚠️ Invalid tdocs.config.json — using defaults.");
     return defaultConfig;
