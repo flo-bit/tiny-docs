@@ -27,3 +27,10 @@ jobs:
 3. The workflow will run automatically when you push to the main branch, after a minute or two your docs should be live at `https://<yourusername>.github.io/<yourrepo>`.
 
 The docs will include all markdown files in the `docs/` folder of your repo as well as the `Readme.md` file.
+
+More:
+
+- [Configuration](./docs/01-configuration.md)
+- [Internal links](./docs/02-internal-links.md)
+- [Embeds](./docs/03-embeds.md)
+- [Customizing](./docs/04-customizing.md)
