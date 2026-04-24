@@ -1,6 +1,7 @@
 // config.server.ts
 import { existsSync, readFileSync } from "node:fs";
-import { resolve as r } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { Config } from "./config.type";
 
 const defaultConfig: Config = {
@@ -27,18 +28,25 @@ const defaultConfig: Config = {
   REPLACE_README_WITH_TITLE: "",
 };
 
+const projectRoot = dirname(fileURLToPath(import.meta.url));
+const parentDir = resolve(projectRoot, "..");
+
+// Parent-layout (CI): tiny-docs sits at <repo>/docs-builder/ with content at <repo>/docs/.
+// Self-layout (local dev): content lives inside this repo at ./docs/.
+export const contentRoot = existsSync(resolve(parentDir, "docs"))
+  ? parentDir
+  : projectRoot;
+
+const configPath = resolve(contentRoot, "tdocs.config.json");
+
 export function loadConfig(): Config {
+  if (!existsSync(configPath)) return defaultConfig;
   try {
-    const configPath = r("../tdocs.config.json");
-    if (existsSync(configPath)) {
-      return JSON.parse(readFileSync(configPath, "utf-8")) as Config;
-    }
-  } catch (e) {
-    console.warn(
-      "⚠️ No tdocs.config.json found or invalid JSON — using defaults.",
-    );
+    return JSON.parse(readFileSync(configPath, "utf-8")) as Config;
+  } catch {
+    console.warn("⚠️ Invalid tdocs.config.json — using defaults.");
+    return defaultConfig;
   }
-  return defaultConfig;
 }
 
 export const config = loadConfig();

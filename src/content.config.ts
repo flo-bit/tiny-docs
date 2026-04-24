@@ -1,5 +1,6 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from 'astro/loaders';
+import { contentRoot } from "../config.server";
 
 export const docsSchema = z.object({
   title: z.string().optional(),
@@ -11,8 +12,8 @@ export const docsSchema = z.object({
 
 const docs = defineCollection({
   loader: glob({
-    pattern: ["docs/**/[^_]*.mdx", "*([Rr][Ee][Aa][Dd][Mm][Ee]).mdx"],
-    base: "../",
+    pattern: ["docs/**/[^_]*.{md,mdx}", "[Rr][Ee][Aa][Dd][Mm][Ee].{md,mdx}"],
+    base: contentRoot,
   }),
   // Type-check frontmatter using a schema
   schema: docsSchema,
