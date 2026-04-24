@@ -14,11 +14,17 @@ type Props = {
   previous: CollectionEntry<"docs"> | null;
   Content: any;
   headings: any;
+  showFullLlms?: boolean;
 };
 
 const sidebar = await hasSidebar();
 
-const { post, next, previous, Content, headings } = Astro.props;
+const { post, next, previous, Content, headings, showFullLlms } = Astro.props;
+
+const pageLlmsUrl = `${config.BASE}/${getSlug(post)}/llms.txt`;
+const fullLlmsUrl = `${config.BASE}/llms-full.txt`;
+const isReadme = post.id.toLowerCase().replace(/\.mdx?$/, "") === "readme";
+const showFull = showFullLlms || isReadme;
 ---
 
 <DocumentationLayout
@@ -34,6 +40,25 @@ const { post, next, previous, Content, headings } = Astro.props;
       sidebar ? "lg:max-w-4xl mx-auto" : "mx-auto",
     ]}
   >
+    <div class="flex flex-wrap gap-2 justify-start mb-4 not-prose">
+      <SecondaryButton
+        href={pageLlmsUrl}
+        title="This page as plain text for LLMs"
+      >
+        llms.txt
+      </SecondaryButton>
+      {
+        showFull ? (
+          <SecondaryButton
+            href={fullLlmsUrl}
+            title="Full documentation as plain text for LLMs"
+          >
+            llms-full.txt
+          </SecondaryButton>
+        ) : null
+      }
+    </div>
+
     <ProseWrapper class="min-h-[40vh]">
       <Content components={{ a: ExternalLink }} />
     </ProseWrapper>
