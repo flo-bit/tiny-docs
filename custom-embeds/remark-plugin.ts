@@ -115,7 +115,7 @@ export default function createPlugin({
 
     const paragraphs = selectAll("paragraph", tree);
     paragraphs.forEach((paragraph) => {
-      const link: Link | null = select(":scope > link:only-child", paragraph);
+      const link = select(":scope > link:only-child", paragraph) as Link | undefined;
       if (!link) return;
 
       const { url, children } = link;
