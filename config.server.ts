@@ -1,7 +1,6 @@
 // config.server.ts
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import type { Config } from "./config.type";
 
 const defaultConfig: Config = {
@@ -28,7 +27,9 @@ const defaultConfig: Config = {
   REPLACE_README_WITH_TITLE: "",
 };
 
-const projectRoot = dirname(fileURLToPath(import.meta.url));
+// Resolve via process.cwd() — Astro runs from project root. import.meta.url
+// would lie when this module is bundled into dist/chunks during build.
+const projectRoot = process.cwd();
 const parentDir = resolve(projectRoot, "..");
 
 // Parent-layout (CI): tiny-docs sits at <repo>/docs-builder/ with content at <repo>/docs/.
