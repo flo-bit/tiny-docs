@@ -1,2 +1,13 @@
 packages:
   - "."
+
+# Allow native deps to run their install/build scripts. Without this,
+# pnpm 10 reports "Ignored build scripts", which is only a warning locally
+# but becomes a hard ERR_PNPM_IGNORED_BUILDS failure in CI (e.g. inside
+# withastro/action). That is what breaks the Deploy Docs workflow.
+# es5-ext's script is only a funding notice, so it stays ignored.
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+ignoredBuiltDependencies:
+  - es5-ext
